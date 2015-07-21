@@ -1,0 +1,55 @@
+'''
+created on June 3, 2015
+'''
+class Tree(str):
+    def __init__(self, key, data=""):
+        "Create a new Tree object with empty L & R subtrees"
+        print("Initiating new tree", key, data)
+        self.key = key
+        self.data = data
+        self.left = self.right = None
+    def insert(self, key, data=""):
+        "Insert a new element in the tree in the correct position"
+        if key < self.key:
+            if self.left:
+                self.left.insert(key)
+                #self.left.insert(Tree(key,data)) # variation didn't work
+            else:
+                self.left = Tree(key, data)
+                #self.left = '4'
+        elif key > self.key:
+            if self.right:
+                self.right.insert(key)
+                #self.right.insert(Tree(key,data)) # variation ddin't work
+            else:
+                self.right = Tree(key, data)
+        else:
+            raise ValueError("Attempt to insert duplicate value")
+    def walk(self):
+        "Generate the keys from the tree in sorted order"
+        if self.left:
+            for n in self.left.walk():
+                yield n
+        yield self.key
+        if self.right:
+            for n in self.right.walk():
+                yield n
+                
+    def find(self, key):
+        "retrieve data associated with key"
+        for i in self.walk():
+            # go through items in sorted order until we 
+            # find the one with our key and return it
+            # if we don't find it we through a KeyError
+            if i == key:
+                print("key: ",key," of type: ", type(key))
+                return(i.data)
+        # nothing found to return so...
+        raise KeyError
+
+if __name__ == '__main__':
+    t = Tree("D")
+    for c in "BJQKFAC":
+        t.insert(c)
+
+    print(list(t.walk()))
